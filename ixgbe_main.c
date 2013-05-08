@@ -6431,6 +6431,8 @@ static netdev_tx_t ixgbe_xmit_frame(struct sk_buff *skb,
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_ring *tx_ring;
+	struct ixgbe_q_vector *q_vector; 
+	netdev_tx_t ret;
 
 	/*
 	 * The minimum packet size for olinfo paylen is 17 so pad the skb
@@ -6443,7 +6445,15 @@ static netdev_tx_t ixgbe_xmit_frame(struct sk_buff *skb,
 	}
 
 	tx_ring = adapter->tx_ring[skb->queue_mapping];
-	return ixgbe_xmit_frame_ring(skb, adapter, tx_ring);
+	ret = ixgbe_xmit_frame_ring(skb, adapter, tx_ring);
+
+	/* Try to clean TX ring if it's full */
+	if (unlikely(ixgbe_desc_unused(tx_ring) < DESC_NEEDED * 2)) {
+		q_vector = adapter->q_vector[skb->queue_mapping];
+		ixgbe_clean_tx_irq(q_vector, tx_ring);
+	}
+
+	return ret;
 }
 
 /**
