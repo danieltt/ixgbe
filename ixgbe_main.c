@@ -6305,6 +6305,23 @@ netdev_tx_t ixgbe_xmit_frame_ring(struct sk_buff *skb,
 	__be16 protocol = skb->protocol;
 	u8 hdr_len = 0;
 
+	/* Dropping packet */
+	{
+	  __u8 *data = (__u8 *) skb->data + 34; /* 14+20 */
+          
+	  /* src and dst port 9 --> pktgen */
+          
+	  if(data[0] == 0 && 
+	     data[1] == 9 && 
+	     data[2] == 0 && 
+	     data[3] == 9) { 
+		tx_ring->stats.bytes +=skb->data_len;
+		tx_ring->stats.packets++;
+		dev_kfree_skb_any(skb);
+		return NETDEV_TX_OK;
+
+	  }
+	}
 	/*
 	 * need: 1 descriptor per page * PAGE_SIZE/IXGBE_MAX_DATA_PER_TXD,
 	 *       + 1 desc for skb_headlen/IXGBE_MAX_DATA_PER_TXD,
