@@ -59,7 +59,8 @@
 
 /* TX/RX descriptor defines */
 #define IXGBE_DEFAULT_TXD		    512
-#define IXGBE_DEFAULT_TX_WORK		    256
+//#define IXGBE_DEFAULT_TX_WORK		    256
+#define IXGBE_DEFAULT_TX_WORK		    512
 #define IXGBE_MAX_TXD			   4096
 #define IXGBE_MIN_TXD			     64
 
@@ -374,6 +375,7 @@ struct hwmon_buff {
 #define IXGBE_20K_ITR		200
 #define IXGBE_10K_ITR		400
 #define IXGBE_8K_ITR		500
+#define IXGBE_MAX_RSC_ITR	4000
 
 /* ixgbe_test_staterr - tests bits in Rx descriptor status and error fields */
 static inline __le32 ixgbe_test_staterr(union ixgbe_adv_rx_desc *rx_desc,

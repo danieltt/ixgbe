@@ -4504,11 +4504,12 @@ static int __devinit ixgbe_sw_init(struct ixgbe_adapter *adapter)
 	adapter->tx_itr_setting = 1;
 
 	/* set default ring sizes */
-	adapter->tx_ring_count = IXGBE_DEFAULT_TXD;
+	adapter->tx_ring_count = IXGBE_MAX_TXD;
 	adapter->rx_ring_count = IXGBE_DEFAULT_RXD;
 
 	/* set default work limits */
-	adapter->tx_work_limit = IXGBE_DEFAULT_TX_WORK;
+	adapter->tx_work_limit = IXGBE_MAX_TXD;
+	//adapter->tx_work_limit = IXGBE_DEFAULT_TX_WORK;
 
 	/* initialize eeprom parameters */
 	if (ixgbe_init_eeprom_params_generic(hw)) {
