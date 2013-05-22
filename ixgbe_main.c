@@ -4052,6 +4052,11 @@ static void ixgbe_up_complete(struct ixgbe_adapter *adapter)
 	ctrl_ext = IXGBE_READ_REG(hw, IXGBE_CTRL_EXT);
 	ctrl_ext |= IXGBE_CTRL_EXT_PFRSTD;
 	IXGBE_WRITE_REG(hw, IXGBE_CTRL_EXT, ctrl_ext);
+
+	//FIXME disable interrupt
+	ixgbe_irq_disable(adapter);
+	if (!test_bit(__IXGBE_DOWN, &adapter->state))
+		ixgbe_irq_enable(adapter, false, false);
 }
 
 void ixgbe_reinit_locked(struct ixgbe_adapter *adapter)
@@ -4861,8 +4866,8 @@ static int ixgbe_open(struct net_device *netdev)
 	if (err)
 		goto err_set_queues;
 
-	ixgbe_up_complete(adapter);
 
+	ixgbe_up_complete(adapter);
 	return 0;
 
 err_set_queues:
@@ -6346,7 +6351,7 @@ netdev_tx_t ixgbe_xmit_frame_ring(struct sk_buff *skb,
 		tx_flags |= IXGBE_TX_FLAGS_SW_VLAN;
 	}
 
-	skb_tx_timestamp(skb);
+//	skb_tx_timestamp(skb);
 
 #ifdef CONFIG_IXGBE_PTP
 	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)) {
@@ -6415,7 +6420,7 @@ xmit_fcoe:
 #endif /* IXGBE_FCOE */
 	ixgbe_tx_map(tx_ring, first, hdr_len);
 
-	ixgbe_maybe_stop_tx(tx_ring, DESC_NEEDED);
+//	ixgbe_maybe_stop_tx(tx_ring, DESC_NEEDED);
 
 	return NETDEV_TX_OK;
 
@@ -6433,7 +6438,7 @@ static netdev_tx_t ixgbe_xmit_frame(struct sk_buff *skb,
 	struct ixgbe_ring *tx_ring;
 	struct ixgbe_q_vector *q_vector; 
 	netdev_tx_t ret;
-
+	local_irq_disable();
 	/*
 	 * The minimum packet size for olinfo paylen is 17 so pad the skb
 	 * in order to meet this minimum size requirement.
