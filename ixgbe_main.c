@@ -6461,6 +6461,7 @@ static netdev_tx_t ixgbe_xmit_frame(struct sk_buff *skb,
 	if (unlikely(ixgbe_desc_unused(tx_ring) < DESC_NEEDED * 2)) {
 		q_vector = adapter->q_vector[skb->queue_mapping];
 		ixgbe_clean_tx_irq(q_vector, tx_ring);
+		tx_ring->tx_stats.tx_clean_xmit++;
 	}
 
 	return ret;
