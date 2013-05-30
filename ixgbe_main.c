@@ -855,6 +855,24 @@ static bool ixgbe_clean_tx_irq(struct ixgbe_q_vector *q_vector,
 	tx_ring->stats.packets += total_packets;
 	/*clean IRQ STATS*/
 	tx_ring->tx_stats.tx_clean_irq += clean_irq;
+	if (total_packets == 0) {
+	} else if (total_packets < 50)
+		adapter->h_tx_clean_1++;
+	else if (total_packets < 100)
+		adapter->h_tx_clean_2++;
+	else if (total_packets < 200)
+		adapter->h_tx_clean_3++;
+	else if (total_packets < 300)
+		adapter->h_tx_clean_4++;
+	else if (total_packets < 400)
+		adapter->h_tx_clean_5++;
+	else if (total_packets < 500)
+		adapter->h_tx_clean_6++;
+	else if (total_packets < 600)
+		adapter->h_tx_clean_7++;
+	else 
+		adapter->h_tx_clean_8++;
+
 	u64_stats_update_end(&tx_ring->syncp);
 	q_vector->tx.total_bytes += total_bytes;
 	q_vector->tx.total_packets += total_packets;
