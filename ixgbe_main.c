@@ -858,17 +858,17 @@ static bool ixgbe_clean_tx_irq(struct ixgbe_q_vector *q_vector,
 	if (total_packets == 0) {
 	} else if (total_packets < 50)
 		adapter->h_tx_clean_1++;
-	else if (total_packets < 100)
-		adapter->h_tx_clean_2++;
-	else if (total_packets < 200)
-		adapter->h_tx_clean_3++;
-	else if (total_packets < 300)
-		adapter->h_tx_clean_4++;
 	else if (total_packets < 400)
-		adapter->h_tx_clean_5++;
-	else if (total_packets < 500)
-		adapter->h_tx_clean_6++;
+		adapter->h_tx_clean_2++;
 	else if (total_packets < 600)
+		adapter->h_tx_clean_3++;
+	else if (total_packets < 700)
+		adapter->h_tx_clean_4++;
+	else if (total_packets < 800)
+		adapter->h_tx_clean_5++;
+	else if (total_packets < 900)
+		adapter->h_tx_clean_6++;
+	else if (total_packets < 2000)
 		adapter->h_tx_clean_7++;
 	else 
 		adapter->h_tx_clean_8++;
