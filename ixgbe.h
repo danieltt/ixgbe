@@ -588,6 +588,14 @@ struct ixgbe_adapter {
 #ifdef CONFIG_IXGBE_HWMON
 	struct hwmon_buff ixgbe_hwmon_buff;
 #endif /* CONFIG_IXGBE_HWMON */
+	u64 h_tx_clean_1;
+	u64 h_tx_clean_2;
+	u64 h_tx_clean_3;
+	u64 h_tx_clean_4;
+	u64 h_tx_clean_5;
+	u64 h_tx_clean_6;
+	u64 h_tx_clean_7;
+	u64 h_tx_clean_8;
 };
 
 struct ixgbe_fdir_filter {
