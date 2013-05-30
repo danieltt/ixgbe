@@ -761,6 +761,7 @@ static bool ixgbe_clean_tx_irq(struct ixgbe_q_vector *q_vector,
 	unsigned int total_bytes = 0, total_packets = 0;
 	unsigned int budget = q_vector->tx.work_limit;
 	unsigned int i = tx_ring->next_to_clean;
+	unsigned int clean_irq = 0;
 
 	if (test_bit(__IXGBE_DOWN, &adapter->state))
 		return true;
@@ -789,6 +790,7 @@ static bool ixgbe_clean_tx_irq(struct ixgbe_q_vector *q_vector,
 		/* update the statistics for this packet */
 		total_bytes += tx_buffer->bytecount;
 		total_packets += tx_buffer->gso_segs;
+		clean_irq = 1;
 
 #ifdef CONFIG_IXGBE_PTP
 		if (unlikely(tx_buffer->tx_flags & IXGBE_TX_FLAGS_TSTAMP))
@@ -851,6 +853,8 @@ static bool ixgbe_clean_tx_irq(struct ixgbe_q_vector *q_vector,
 	u64_stats_update_begin(&tx_ring->syncp);
 	tx_ring->stats.bytes += total_bytes;
 	tx_ring->stats.packets += total_packets;
+	/*clean IRQ STATS*/
+	tx_ring->tx_stats.tx_clean_irq += clean_irq;
 	u64_stats_update_end(&tx_ring->syncp);
 	q_vector->tx.total_bytes += total_bytes;
 	q_vector->tx.total_packets += total_packets;
@@ -5077,6 +5081,8 @@ void ixgbe_update_stats(struct ixgbe_adapter *adapter)
 	u64 non_eop_descs = 0, restart_queue = 0, tx_busy = 0;
 	u64 alloc_rx_page_failed = 0, alloc_rx_buff_failed = 0;
 	u64 bytes = 0, packets = 0, hw_csum_rx_error = 0;
+	u64 tx_clean_irq = 0, tx_clean_xmit = 0;
+
 
 	if (test_bit(__IXGBE_DOWN, &adapter->state) ||
 	    test_bit(__IXGBE_RESETTING, &adapter->state))
@@ -5118,9 +5124,12 @@ void ixgbe_update_stats(struct ixgbe_adapter *adapter)
 		tx_busy += tx_ring->tx_stats.tx_busy;
 		bytes += tx_ring->stats.bytes;
 		packets += tx_ring->stats.packets;
+		tx_clean_xmit += tx_ring->tx_stats.tx_clean_xmit;
+		tx_clean_irq += tx_ring->tx_stats.tx_clean_irq;
 	}
 	adapter->restart_queue = restart_queue;
-	adapter->tx_busy = tx_busy;
+	adapter->tx_clean_xmit = tx_clean_xmit;
+	adapter->tx_clean_irq = tx_clean_irq;
 	netdev->stats.tx_bytes = bytes;
 	netdev->stats.tx_packets = packets;
 

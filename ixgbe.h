@@ -179,6 +179,8 @@ struct ixgbe_tx_queue_stats {
 	u64 restart_queue;
 	u64 tx_busy;
 	u64 tx_done_old;
+	u64 tx_clean_xmit;
+	u64 tx_clean_irq;
 };
 
 struct ixgbe_rx_queue_stats {
@@ -526,6 +528,8 @@ struct ixgbe_adapter {
 	struct ixgbe_hw_stats stats;
 
 	u64 tx_busy;
+	u64 tx_clean_xmit;
+	u64 tx_clean_irq;
 	unsigned int tx_ring_count;
 	unsigned int rx_ring_count;
 

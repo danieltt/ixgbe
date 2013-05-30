@@ -119,6 +119,8 @@ static const struct ixgbe_stats ixgbe_gstrings_stats[] = {
 	{"tx_fcoe_packets", IXGBE_STAT(stats.fcoeptc)},
 	{"tx_fcoe_dwords", IXGBE_STAT(stats.fcoedwtc)},
 #endif /* IXGBE_FCOE */
+	{"tx_clean_irq", IXGBE_STAT(tx_clean_irq)},
+	{"tx_clean_xmit", IXGBE_STAT(tx_clean_xmit)},
 };
 
 /* ixgbe allocates num_tx_queues and num_rx_queues symmetrically so
