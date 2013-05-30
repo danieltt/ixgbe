@@ -121,6 +121,14 @@ static const struct ixgbe_stats ixgbe_gstrings_stats[] = {
 #endif /* IXGBE_FCOE */
 	{"tx_clean_irq", IXGBE_STAT(tx_clean_irq)},
 	{"tx_clean_xmit", IXGBE_STAT(tx_clean_xmit)},
+	{"h_tx_clean_1", IXGBE_STAT(h_tx_clean_1)},
+	{"h_tx_clean_2", IXGBE_STAT(h_tx_clean_2)},
+	{"h_tx_clean_3", IXGBE_STAT(h_tx_clean_3)},
+	{"h_tx_clean_4", IXGBE_STAT(h_tx_clean_4)},
+	{"h_tx_clean_5", IXGBE_STAT(h_tx_clean_5)},
+	{"h_tx_clean_6", IXGBE_STAT(h_tx_clean_6)},
+	{"h_tx_clean_7", IXGBE_STAT(h_tx_clean_7)},
+	{"h_tx_clean_8", IXGBE_STAT(h_tx_clean_8)},
 };
 
 /* ixgbe allocates num_tx_queues and num_rx_queues symmetrically so
